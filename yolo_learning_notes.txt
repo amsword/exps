@@ -1,0 +1,149 @@
+Reorg layer
+16-2-2
+index in the output feature map -> index in the input feature map
+0,0,0->0,0,0
+0,0,1->0,0,2
+0,1,0->0,1,0
+0,1,1->0,1,2
+1,0,0->1,0,0
+1,0,1->1,0,2
+1,1,0->1,1,0
+1,1,1->1,1,2
+2,0,0->2,0,0
+2,0,1->2,0,2
+2,1,0->2,1,0
+2,1,1->2,1,2
+3,0,0->3,0,0
+3,0,1->3,0,2
+3,1,0->3,1,0
+3,1,1->3,1,2
+4,0,0->0,0,1
+4,0,1->0,0,3
+4,1,0->0,1,1
+4,1,1->0,1,3
+5,0,0->1,0,1
+5,0,1->1,0,3
+5,1,0->1,1,1
+5,1,1->1,1,3
+6,0,0->2,0,1
+6,0,1->2,0,3
+6,1,0->2,1,1
+6,1,1->2,1,3
+7,0,0->3,0,1
+7,0,1->3,0,3
+7,1,0->3,1,1
+7,1,1->3,1,3
+8,0,0->0,2,0
+8,0,1->0,2,2
+8,1,0->0,3,0
+8,1,1->0,3,2
+9,0,0->1,2,0
+9,0,1->1,2,2
+9,1,0->1,3,0
+9,1,1->1,3,2
+10,0,0->2,2,0
+10,0,1->2,2,2
+10,1,0->2,3,0
+10,1,1->2,3,2
+11,0,0->3,2,0
+11,0,1->3,2,2
+11,1,0->3,3,0
+11,1,1->3,3,2
+12,0,0->0,2,1
+12,0,1->0,2,3
+12,1,0->0,3,1
+12,1,1->0,3,3
+13,0,0->1,2,1
+13,0,1->1,2,3
+13,1,0->1,3,1
+13,1,1->1,3,3
+14,0,0->2,2,1
+14,0,1->2,2,3
+14,1,0->2,3,1
+14,1,1->2,3,3
+15,0,0->3,2,1
+15,0,1->3,2,3
+15,1,0->3,3,1
+15,1,1->3,3,3
+
+layer     filters    size              input                output
+    0 conv     32  3 x 3 / 1   608 x 608 x   3   ->   608 x 608 x  32
+    1 max          2 x 2 / 2   608 x 608 x  32   ->   304 x 304 x  32
+    2 conv     64  3 x 3 / 1   304 x 304 x  32   ->   304 x 304 x  64
+    3 max          2 x 2 / 2   304 x 304 x  64   ->   152 x 152 x  64
+    4 conv    128  3 x 3 / 1   152 x 152 x  64   ->   152 x 152 x 128
+    5 conv     64  1 x 1 / 1   152 x 152 x 128   ->   152 x 152 x  64
+    6 conv    128  3 x 3 / 1   152 x 152 x  64   ->   152 x 152 x 128
+    7 max          2 x 2 / 2   152 x 152 x 128   ->    76 x  76 x 128
+    8 conv    256  3 x 3 / 1    76 x  76 x 128   ->    76 x  76 x 256
+    9 conv    128  1 x 1 / 1    76 x  76 x 256   ->    76 x  76 x 128
+   10 conv    256  3 x 3 / 1    76 x  76 x 128   ->    76 x  76 x 256
+   11 max          2 x 2 / 2    76 x  76 x 256   ->    38 x  38 x 256
+   12 conv    512  3 x 3 / 1    38 x  38 x 256   ->    38 x  38 x 512
+   13 conv    256  1 x 1 / 1    38 x  38 x 512   ->    38 x  38 x 256
+   14 conv    512  3 x 3 / 1    38 x  38 x 256   ->    38 x  38 x 512
+   15 conv    256  1 x 1 / 1    38 x  38 x 512   ->    38 x  38 x 256
+   16 conv    512  3 x 3 / 1    38 x  38 x 256   ->    38 x  38 x 512
+   17 max          2 x 2 / 2    38 x  38 x 512   ->    19 x  19 x 512
+   18 conv   1024  3 x 3 / 1    19 x  19 x 512   ->    19 x  19 x1024
+   19 conv    512  1 x 1 / 1    19 x  19 x1024   ->    19 x  19 x 512
+   20 conv   1024  3 x 3 / 1    19 x  19 x 512   ->    19 x  19 x1024
+   21 conv    512  1 x 1 / 1    19 x  19 x1024   ->    19 x  19 x 512
+   22 conv   1024  3 x 3 / 1    19 x  19 x 512   ->    19 x  19 x1024
+   23 conv   1024  3 x 3 / 1    19 x  19 x1024   ->    19 x  19 x1024
+   24 conv   1024  3 x 3 / 1    19 x  19 x1024   ->    19 x  19 x1024
+   25 route  16
+   26 conv     64  1 x 1 / 1    38 x  38 x 512   ->    38 x  38 x  64
+   27 reorg              / 2    38 x  38 x  64   ->    19 x  19 x 256
+   28 route  27 24
+   29 conv   1024  3 x 3 / 1    19 x  19 x1280   ->    19 x  19 x1024
+   30 conv    425  1 x 1 / 1    19 x  19 x1024   ->    19 x  19 x 425
+   31 detection
+
+original darknet
+- each pixel value is divided by 255 so that it ranges from 0 to 1
+- input image size: w = 768; h = 576
+- the image is read by opencv, and thus the order is bgr
+- then the image is converted to rgb through the function of rgbgr_image()
+- the network input is 608 * 608
+- the image is first rescaled with the ratio fixed and the resized image should
+fit in 608 * 608. 768 * 576 -> 608 * 456
+
+The resize is through linear interpolation, which might suffer if the image is
+scaled heavily from a very large to smaller size.
+- Then the image is embedded into the center of 608 * 608. the pixel value is
+0.5, 0.5, 0.5 (grey) outside the image 
+fill_image(sized, .5);
+- Batch normalization: each channel one mean and one variance
+- After barch normalization, each channel is multiplied by a scalar
+- Each channel is added a bias
+- The output of the last conv layer is with 19 x 19 x 425. The number of 425
+comes from 5 * (80 + 1 + 4). The value of 5 means 5 candidate boxes; each
+box can be one of 80 classes; the box also has 1 objectness score; the box
+should have 4 values to represent the coordinates;
+- The feature map is normalized by applying logistic function on x and y
+coordinates and applying the softmax function on the 80 class probability
+values. 
+- Next is how to give the output. One of the output is the variable of boxes,
+    whose size is 19 x 19 x 5. Note each element is with the type of box, which
+    has 4 values. Another output is the probs, whose size is 19 x 19 x 5 x 81. 
+    If the prob is larger than thresh (0.24), it would be the prob or 0. The last
+    entry is the value of the maximuml
+
+int index = n*l.w*l.h + i;
+probs[index][j] = (prob > thresh) ? prob : 0;
+probs[index][l.classes] = max;
+
+- scripts
+
+./darknet detect cfg/yolo.cfg yolo.weights data/dog.jpg
+
+./darknet detector train cfg/voc.data cfg/yolo-voc.cfg darknet19_448.conv.23
+
+
+src/data.c
+-- load_threads() -> load_data_in_thread() -> load_thread() ->
+load_data_detection()
+
+    image size: 500 x 375
+
