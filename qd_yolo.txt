@@ -1,0 +1,15 @@
+# yolo testing 
+python scripts/yolodet.py \
+    --net /home/leizhang/work/yolo/yolo_voc_test.prototxt \
+    --model /home/leizhang/work/yolo/models/yolo_voc_iter_6000.caffemodel \
+    --intsv /home/leizhang/work/yolo/test.tsv \
+    --outtsv ~/work/yolo/test.eval \
+    --colimg 2 
+
+# yolo evaluate
+python scripts/deteval.py \
+    --truth data/voc20/test.tsv \
+    --dets ~/work/yolo/test.eval
+
+-- in the source code of darknet, the padding is 0.5, while in the code of
+quickdetection, it is 0
