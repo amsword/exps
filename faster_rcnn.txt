@@ -1,0 +1,23 @@
+- conv5_3       ->conv/relu   ->rpn/output (512 channels)
+- rpn/output    ->conv        ->rpn_cls_score (18 channels, 2 * 9)
+- rpn_cls_score ->Reshape     ->rpn_cls_score_reshape (2 channels)
+- rpn/output    ->conv        ->rpn_bbox_pred (36 channels, 4 * 9)
+- ->rpn_labels 
+Each anchor: mark the label as ignore if it exceeds the boarders
+mark it as negative if the IoU is less than 0.3
+if the IoU is larger than 0.7, mark it as positive
+For each gt, the anchor with highest IoU is marked as positive
+
+- rpn_cls_prob_reshape + rpn_bbox_pred -> SmoothL1Loss
+- rpn_cls_score_reshape + rpn_labels ->Softmaxwithloss
+
+- Training script
+./tools/train_net.py --gpu 0 \
+  --solver models/pascal_voc/VGG16/faster_rcnn_end2end/solver.prototxt \
+  --weights data/imagenet_models/VGG16.v2.caffemodel \
+  --imdb ${TRAIN_IMDB} \
+  --iters ${ITERS} \
+  --cfg experiments/cfgs/faster_rcnn_end2end.yml \
+  ${EXTRA_ARGS}
+
+
