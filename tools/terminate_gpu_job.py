@@ -6,12 +6,21 @@ import sys
 #import caffe
 import psutil
 
-if __name__ == '__main__':
+def terminate():
     for process in psutil.process_iter():
         cmd = process.cmdline()
         if process.username() == 'REDMOND.jianfw': 
             if len(cmd) == 2 and 'python' in cmd[0] and 'yolotrain' in cmd[1]:
                 print cmd
                 process.terminate()
-    print 'good'
+
+def print_process_info(pid):
+    for process in psutil.process_iter():
+        if process.pid == pid:
+            cmd = process.cmdline()
+            print process.username(), \
+                    ' '.join(cmd)
+
+if __name__ == '__main__':
+    print_process_info(57091)
 

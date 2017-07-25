@@ -146,4 +146,9 @@ src/data.c
 load_data_detection()
 
     image size: 500 x 375
+- Loss function
+    - For each position in the last feature map, we have 5 anchor boxes. Each
+    anchor box generates four numbers for the coordinates; 1 number for the
+    objectiveness; and K numbers for which object it belongs to. 
+    
 
